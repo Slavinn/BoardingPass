@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.boardingpass.boardingpass.Controller"
+          vgap="10" hgap="10">
+
+
+    <!--name-->
+    <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <TextField fx:id="passengerName" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    <!--email-->
+    <Label text="email:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <TextField fx:id="passengerEmail" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    <!--phoneNumber-->
+    <Label text="phone number:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <TextField fx:id="passengerPhoneNumber" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <Label text="Departure date:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <DatePicker fx:id="passengerDepartureDate" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+    <HBox spacing="10" alignment="bottom_right"
+          GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <Button text="Check out"
+                onAction="#handleSubmitButtonAction"/>
+    </HBox>
+
+
+</GridPane>
