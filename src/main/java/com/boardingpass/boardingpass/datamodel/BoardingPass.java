@@ -34,9 +34,13 @@ public class BoardingPass {
     private LocalDateTime departureTime;
     private LocalDateTime eta;
 
+    private double childDiscount;
+    private double elderDiscount;
+    private double femaleDiscount;
+
 
     // Ticket Price
-    private int price;
+    private double price;
 
     public BoardingPass() {
     }
@@ -85,7 +89,21 @@ public class BoardingPass {
         this.eta = eta;
     }
 
-    public void setPrice(int price) {
+    public void getPriceDiscounts(int price) {
+        if(this.age <= 12) {
+            this.childDiscount = price * 0.5;
+        } else if (this.age >= 60) {
+            this.elderDiscount = price * 0.6;
+        }
+        setPrice((price - childDiscount - elderDiscount));
+        if (this.gender) {
+            this.femaleDiscount = this.price * .25;
+        }
+        setPrice(price - this.femaleDiscount);
+
+    }
+
+    public void setPrice(double price) {
         this.price = price;
     }
 
