@@ -13,7 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="669.0" prefWidth="929.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boardingpass.boardingpass.HelloController">
+<?import javafx.collections.FXCollections?>
+<?import np.com.ngopal.control.AutoFillTextBox?>
+<VBox alignment="CENTER" prefHeight="669.0" prefWidth="929.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boardingpass.boardingpass.Controller">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -53,14 +55,14 @@
                <children>
                   <TextField fx:id="inputName" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <TextField fx:id="inputAge" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <ChoiceBox fx:id="inputGenderSelection" prefHeight="26.0" prefWidth="195.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <ChoiceBox fx:id="inputGenderSelection" prefHeight="26.0" prefWidth="195.0" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
                   <TextField fx:id="inputPhoneNumber" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                   <TextField fx:id="inputEmail" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                   <DatePicker fx:id="inputDate" prefHeight="25.0" prefWidth="191.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                  <TextField fx:id="inputOrigin" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                  <TextField fx:id="inputDestination" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-                  <TextField fx:id="InputDepartTime" GridPane.columnIndex="2" GridPane.rowIndex="10" />
-                  <Button fx:id="estimate_btn" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="24.0" prefWidth="94.0" text="Estimate Flight" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
+                  <AutoFillTextBox fx:id="inputOrigin" GridPane.columnIndex="2" GridPane.rowIndex="8" styleClass="aut" />
+                  <AutoFillTextBox fx:id="inputDestination" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                  <TextField fx:id="inputDepartTime" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+                  <Button fx:id="estimate_btn" onMouseClicked="#onEstimateButtonPress" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="24.0" prefWidth="94.0" text="Estimate Flight" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
                   <Label text="Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Passenger Info:" GridPane.columnIndex="1">
                      <font>
@@ -101,10 +103,10 @@
                   <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="outputFlightTIme" alignment="CENTER_RIGHT" graphicTextGap="0.0" prefHeight="54.0" prefWidth="124.0" text="00:00 pm" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="outputFlightTime" alignment="CENTER_RIGHT" graphicTextGap="0.0" prefHeight="54.0" prefWidth="124.0" text="00:00 pm" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Flight Time" GridPane.rowIndex="1" />
-                  <Label text="Arival TIme" GridPane.rowIndex="2" />
-                  <Label fx:id="outputArivalTime" alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="108.0" text="00:00 pm" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label text="Arrival Time" GridPane.rowIndex="2" />
+                  <Label fx:id="outputArrivalTime" alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="108.0" text="00:00 pm" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label prefHeight="46.0" prefWidth="149.0" text="Flight Duration" GridPane.rowIndex="3">
                      <font>
                         <Font name="System Bold" size="12.0" />
@@ -118,7 +120,7 @@
                   <Label text="Ticket" GridPane.rowIndex="5" />
                   <Label fx:id="outputTicketPrice" alignment="CENTER_RIGHT" prefHeight="48.0" prefWidth="99.0" text="\$0.00" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <Label text="Ladies Discount" textFill="#797878" GridPane.rowIndex="6" />
-                  <Label fx:id="outputLadiesDIscountAmount" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="102.0" text="-0.00" textAlignment="RIGHT" textFill="#797878" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <Label fx:id="outputLadiesDiscountAmount" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="102.0" text="-0.00" textAlignment="RIGHT" textFill="#797878" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                   <Label text="Age Discount" textFill="#797878" GridPane.rowIndex="7" />
                   <Label fx:id="outputAgeDiscountAmount" alignment="CENTER_RIGHT" prefHeight="48.0" prefWidth="98.0" text="-0.00" textAlignment="RIGHT" textFill="#797878" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                   <Label prefHeight="48.0" prefWidth="156.0" text="Total Cost" GridPane.rowIndex="8">
@@ -131,7 +133,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Button fx:id="bookFlight_btn" mnemonicParsing="false" prefHeight="26.0" prefWidth="108.0" text="Book Flight" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
+                  <Button fx:id="bookFlight_btn" mnemonicParsing="false" prefHeight="26.0" prefWidth="108.0" text="Book Flight" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" onMouseClicked="#onBookFlightButtonPress"/>
                   <Separator prefWidth="200.0" GridPane.rowIndex="4" />
                   <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <Label fx:id="outputEstimate" text="Estimate #0000">
