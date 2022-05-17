@@ -53,8 +53,8 @@ public class BoardingPass {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setGender(boolean gender) {
-        this.gender = gender;
+    public void setGender(String gender) {
+        this.gender = gender.equals("female");
     }
 
     public void setAge(Integer age) {
@@ -97,7 +97,7 @@ public class BoardingPass {
 
     @Override
     public String toString() {
-        return String.format("name: %s email: %s phoneNumber: %s gender: %b age: %d"
-                , name, email, phoneNumber, gender, age);
+        return String.format("name: %s\n age: %s\n isFemale: %b\n phoneNumber: %s\n email: %s"
+                , name, age, gender, phoneNumber, email);
     }
 }
