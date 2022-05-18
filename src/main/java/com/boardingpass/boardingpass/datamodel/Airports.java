@@ -31,6 +31,15 @@ public class Airports {
         return airportList;
     }
 
+    public Airport getAirportByName(String airPortName) {
+        for (Airport airport : airportList) {
+            if(airport.getName() == airPortName) {
+                return airport;
+            }
+        }
+        return null;
+    }
+
     public void fetchAirports() throws ExecutionException, InterruptedException, ParseException, JsonProcessingException {
         AsyncHttpClient client = new DefaultAsyncHttpClient();
         CompletableFuture<Response> response = client.prepare("GET", "https://airlabs.co/api/v9/airports?country_code=US&api_key=91bdebc2-0936-4e70-af69-37e143e84e4d")

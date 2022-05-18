@@ -26,13 +26,14 @@ public class BoardingPass {
     private Integer age;
 
 
+    private Flight flight;
     /// Fight details
     private String boardingPassNumber;
     private String departureDate;
-    private String origin;
-    private String destination;
-    private LocalDateTime departureTime;
-    private LocalDateTime eta;
+    private Airport origin;
+    private Airport destination;
+    private String departureTime;
+    private String eta;
 
     private double childDiscount;
     private double elderDiscount;
@@ -42,7 +43,12 @@ public class BoardingPass {
     // Ticket Price
     private double price;
 
+    public Flight getFlight() {
+        return flight;
+    }
+
     public BoardingPass() {
+        this.flight = new Flight();
         this.name = "";
         this.email = "";
         this.phoneNumber = "";
@@ -50,8 +56,8 @@ public class BoardingPass {
         this.age = 0;
         this.boardingPassNumber = "";
         this.departureDate = "";
-        this.origin = "";
-        this.destination = "";
+        this.origin = null;
+        this.destination = null;
         this.departureTime = null;
         this.eta = null;
         this.childDiscount = 0;
@@ -76,8 +82,8 @@ public class BoardingPass {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender.equals("female");
+    public void setGender(String genderInput) {
+        this.gender = genderInput.equals("female");
     }
 
     public void setAge(Integer age) {
@@ -92,20 +98,28 @@ public class BoardingPass {
         this.departureDate =  departureDate;
     }
 
-    public void setOrigin(String origin) {
+    public void setOrigin(Airport origin) {
         this.origin = origin;
     }
 
-    public void setDestination(String destination) {
+    public void setDestination(Airport destination) {
         this.destination = destination;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
+    public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
     }
 
-    public void setEta(LocalDateTime eta) {
+    public void setEta(String eta) {
         this.eta = eta;
+    }
+
+    public Airport getOrigin() {
+        return origin;
+    }
+
+    public Airport getDestination() {
+        return destination;
     }
 
     public void getPriceDiscounts(int price) {

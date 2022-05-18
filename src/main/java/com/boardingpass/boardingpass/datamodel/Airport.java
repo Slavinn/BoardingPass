@@ -17,6 +17,10 @@ public class Airport {
         this.lat = 0;
     }
 
+    public String getIata_code() {
+        return iata_code;
+    }
+
     public String getName() {
         return name;
     }
