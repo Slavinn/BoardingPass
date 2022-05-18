@@ -43,6 +43,25 @@ public class BoardingPass {
     private double price;
 
     public BoardingPass() {
+        this.name = "";
+        this.email = "";
+        this.phoneNumber = "";
+        this.gender = false;
+        this.age = 0;
+        this.boardingPassNumber = "";
+        this.departureDate = "";
+        this.origin = "";
+        this.destination = "";
+        this.departureTime = null;
+        this.eta = null;
+        this.childDiscount = 0;
+        this.elderDiscount = 0;
+        this.femaleDiscount = 0;
+        this.price = 0;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public void setName(String name) {

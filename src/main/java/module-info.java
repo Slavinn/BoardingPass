@@ -5,7 +5,6 @@ module com.boardingpass.boardingpass {
     requires json.simple;
     requires com.fasterxml.jackson.databind;
     requires com.google.gson;
-    requires javafx.autocomplete.field;
 
 
     opens com.boardingpass.boardingpass to javafx.fxml;

@@ -84,6 +84,20 @@ public class Controller {
                 }
             }
         };
+        new Thread(task).start();
+        appLoop = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                if(airportNames.contains(inputOrigin.getText()) && airportNames.contains(inputDestination.getText()) && boardingPassData.getPrice() == 0) {
+                    System.out.println("estimate plane ticket");
+                    boardingPassData.setPrice(250);
+//                    boardingPassData.getPriceDiscounts(250);
+                    System.out.println(boardingPassData.getPrice());
+                }
+            }
+        };
+
+        appLoop.start();
 
         new Thread(task).start();
 
@@ -94,14 +108,18 @@ public class Controller {
     }
 
     public void onEstimateButtonPress() {
-        boardingPassData.setName(inputName.getText());
-        boardingPassData.setAge(Integer.parseInt(inputAge.getText()));
-        boardingPassData.setGender(inputGenderSelection.getValue().toLowerCase(Locale.ROOT));
+//        boardingPassData.setName(inputName.getText());
+//        boardingPassData.setAge(Integer.parseInt(inputAge.getText()));
+//        boardingPassData.setGender(inputGenderSelection.getValue().toLowerCase(Locale.ROOT));
+//
+//        // validate phoneNumber
+//        boardingPassData.setPhoneNumber(inputPhoneNumber.getText());
+//        boardingPassData.setEmail(inputEmail.getText());
+//        System.out.println(boardingPassData.toString());
+        String stringPrice = String.format("Estimate: $ %.2f",boardingPassData.getPrice());
 
-        // validate phoneNumber
-        boardingPassData.setPhoneNumber(inputPhoneNumber.getText());
-        boardingPassData.setEmail(inputEmail.getText());
-        System.out.println(boardingPassData.toString());
+        outputEstimate.setText(stringPrice);
+        showEstimates();
 
 
         

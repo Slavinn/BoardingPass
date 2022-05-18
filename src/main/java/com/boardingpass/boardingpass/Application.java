@@ -1,7 +1,6 @@
 package com.boardingpass.boardingpass;
 
 import javafx.fxml.FXMLLoader;
-import np.com.ngopal.control.AutoFillTextBox;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
