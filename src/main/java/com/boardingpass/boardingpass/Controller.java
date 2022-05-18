@@ -9,7 +9,10 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class Controller {
+    public GridPane flightEstimateBox;
 
     private AnimationTimer appLoop;
     private ArrayList<String> airportNames;
@@ -30,6 +34,7 @@ public class Controller {
     public Button bookFlight_btn;
     public Label outputEstimate;
     private BoardingPass boardingPassData;
+    
 
     @FXML
     private TextField inputName;
@@ -97,7 +102,13 @@ public class Controller {
         boardingPassData.setPhoneNumber(inputPhoneNumber.getText());
         boardingPassData.setEmail(inputEmail.getText());
         System.out.println(boardingPassData.toString());
+
+
+        
     }
 
-
+    public void showEstimates(){
+            flightEstimateBox.setOpacity(1);
+    }
+    
 }
