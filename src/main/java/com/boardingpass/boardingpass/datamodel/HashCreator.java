@@ -22,7 +22,7 @@ public class HashCreator {
 
     private String convertToHex(final byte[] messageDigest) {
         BigInteger bigint = new BigInteger(1, messageDigest);
-        String hexText = bigint.toString(13);
+        String hexText = bigint.toString(9);
         while (hexText.length() < 32) {
             hexText = "0".concat(hexText);
         }

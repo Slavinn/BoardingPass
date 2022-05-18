@@ -18,6 +18,8 @@ public class Application extends javafx.application.Application {
         stage.setTitle("Boarding Pass");
         stage.setScene(scene);
         stage.show();
+
+
     }
 
     public static void main(String[] args) {

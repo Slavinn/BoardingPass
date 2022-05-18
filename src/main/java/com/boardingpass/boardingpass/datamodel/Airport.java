@@ -17,6 +17,9 @@ public class Airport {
         this.lat = 0;
     }
 
+    public String getName() {
+        return name;
+    }
 
     @Override
     public String toString() {

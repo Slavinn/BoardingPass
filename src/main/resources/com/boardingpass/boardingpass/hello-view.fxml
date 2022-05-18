@@ -15,6 +15,7 @@
 
 <?import javafx.collections.FXCollections?>
 <?import np.com.ngopal.control.AutoFillTextBox?>
+<?import com.boardingpass.boardingpass.AutoCompleteTextField?>
 <VBox alignment="CENTER" prefHeight="669.0" prefWidth="929.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boardingpass.boardingpass.Controller">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -59,9 +60,9 @@
                   <TextField fx:id="inputPhoneNumber" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                   <TextField fx:id="inputEmail" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                   <DatePicker fx:id="inputDate" prefHeight="25.0" prefWidth="191.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                  <AutoFillTextBox fx:id="inputOrigin" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                  <AutoFillTextBox fx:id="inputDestination" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-                  <TextField fx:id="inputDepartTime" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+                  <AutoCompleteTextField fx:id="inputOrigin" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                  <AutoCompleteTextField fx:id="inputDestination" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                  <ChoiceBox fx:id="inputDepartTime" GridPane.columnIndex="2" GridPane.rowIndex="10" />
                   <Button fx:id="estimate_btn" onMouseClicked="#onEstimateButtonPress" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="24.0" prefWidth="94.0" text="Estimate Flight" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
                   <Label text="Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Passenger Info:" GridPane.columnIndex="1">

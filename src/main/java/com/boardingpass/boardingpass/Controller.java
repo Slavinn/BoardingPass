@@ -4,20 +4,22 @@ import com.boardingpass.boardingpass.datamodel.Airport;
 import com.boardingpass.boardingpass.datamodel.Airports;
 import com.boardingpass.boardingpass.datamodel.BoardingPass;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import np.com.ngopal.control.AutoFillTextBox;
 import org.json.simple.parser.ParseException;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class Controller {
 
-
+    private AnimationTimer appLoop;
+    private ArrayList<String> airportNames;
     public Label outputFlightTime;
     public Label outputArrivalTime;
     public Label outputFlightDuration;
@@ -42,11 +44,11 @@ public class Controller {
     @FXML
     private DatePicker inputDate;
     @FXML
-    private AutoFillTextBox<ObservableList<Airport>> inputOrigin;
+    private AutoCompleteTextField inputOrigin;
     @FXML
-    private AutoFillTextBox<ObservableList<Airport>> inputDestination;
+    private AutoCompleteTextField inputDestination;
     @FXML
-    private TextField inputDepartTime;
+    private ChoiceBox<String> inputDepartTime;
 //    @FXML
 //    private String outputFlightTime;
 
@@ -54,21 +56,30 @@ public class Controller {
     public void initialize() {
         boardingPassData = new BoardingPass();
         inputGenderSelection.getItems().addAll("Male", "Female");
-        ObservableList<Airport> data = FXCollections.observableArrayList();
+        inputDepartTime.getItems().addAll("6:00 AM","9:30 AM","1:00 PM","4:45 PM","6:00 PM","10:00 PM");
+        ObservableList<String> data = FXCollections.observableArrayList();
+        airportNames = new ArrayList<>();
+//        inputOrigin.setVisible(false);
         Runnable task = new Runnable() {
             @Override
             public void run() {
                 try {
                     Airports.getInstance().fetchAirports();
-                    data.addAll(Airports.getInstance().getAirportList());
-                    System.out.println("It worked?");
-                    inputDestination.addData(data);
-                    inputOrigin.addData(data);
+
+                    for (Airport airport : Airports.getInstance().getAirportList()) {
+                        airportNames.add(airport.getName());
+
+                    }
+                    inputOrigin.getEntries().addAll(airportNames);
+                    inputDestination.getEntries().addAll(airportNames);
+                    System.out.println("Wait for me to print before typing in text box: Add a hide and show visibility");
+
                 } catch (ExecutionException | InterruptedException | ParseException | JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
             }
         };
+
         new Thread(task).start();
 
     }
