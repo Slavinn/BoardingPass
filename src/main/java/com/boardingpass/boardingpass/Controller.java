@@ -94,8 +94,8 @@ public class Controller {
 
                     for (Airport airport : Airports.getInstance().getAirportList()) {
                         airportNames.add(airport.getName());
-
                     }
+
                     inputOrigin.getEntries().addAll(airportNames);
                     inputDestination.getEntries().addAll(airportNames);
                     System.out.println("Wait for me to print before typing in text box: Add a hide and show visibility");
@@ -105,44 +105,42 @@ public class Controller {
                 }
             }
         };
+        
         new Thread(task).start();
         appLoop = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                if(airportNames.contains(inputOrigin.getText()) && airportNames.contains(inputDestination.getText()) && boardingPassData.getPrice() == 0) {
+                if(airportNames.contains(inputOrigin.getText()) && airportNames.contains(inputDestination.getText()) && boardingPassData.getTicketPrice() == 0) {
                     System.out.println("estimate plane ticket");
                     boardingPassData.setOrigin(Airports.getInstance()
                                     .getAirportByName(inputOrigin.getText()));
                     boardingPassData.setDestination(Airports.getInstance()
                             .getAirportByName(inputDestination.getText()));
-
-                    boardingPassData.setPrice(-1);
+                    boardingPassData.setTicketPrice(500);
 
                     Runnable getDistance = new Runnable() {
                         @Override
                         public void run() {
+
                             try {
                                 boardingPassData.getFlight().fetchDistance(boardingPassData.getOrigin(), boardingPassData.getDestination());
                             } catch (ExecutionException | InterruptedException | ParseException e) {
                                 throw new RuntimeException(e);
                             }
-                            boardingPassData.setPrice(250);
-//                      boardingPassData.getPriceDiscounts(250);
-                            System.out.println(boardingPassData.getPrice());
+
+                            boardingPassData.setTicketPrice(250);
+//                          boardingPassData.getPriceDiscounts(250);
+                            System.out.println(boardingPassData.getTicketPrice());
                         }
                     };
+
                     new Thread(getDistance).start();
-
-
-
                 }
             }
         };
 
         appLoop.start();
-
         new Thread(task).start();
-
     }
 
     public void onBookFlightButtonPress() {
@@ -150,72 +148,124 @@ public class Controller {
     }
 
     public void onEstimateButtonPress() {
+        int validEntries = 0;
+
         if (inputName.getText().isEmpty()) {
             inputName.requestFocus();
         } else {
             boardingPassData.setName(inputName.getText());
+            validEntries++;
         }
+
         if (inputAge.getText().isEmpty()) {
             inputAge.requestFocus();
         } else {
             boardingPassData.setAge(Integer.parseInt(inputAge.getText()));
+            validEntries++;
         }
+
         if (inputGenderSelection.getValue() == null) {
             inputGenderSelection.show();
             inputPhoneNumber.requestFocus();
         } else {
             boardingPassData.setGender(inputGenderSelection.getValue());
+            validEntries++;
         }
+
         if (inputPhoneNumber.getText().isEmpty()) {
             inputPhoneNumber.requestFocus();
         } else {
             boardingPassData.setPhoneNumber(inputPhoneNumber.getText());
+            validEntries++;
         }
-        if(inputEmail.getText().isEmpty()) {
+
+        if (inputEmail.getText().isEmpty()) {
             inputEmail.requestFocus();
         } else {
             boardingPassData.setEmail(inputEmail.getText());
+            validEntries++;
         }
-        if (inputDate.getValue() == null ){
+
+        if (inputDate.getValue() == null) {
             inputDate.requestFocus();
         } else {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
             String formattedString = inputDate.getValue().format(formatter);
             boardingPassData.setDepartureDate(formattedString);
+            validEntries++;
         }
-        if(inputOrigin.getText().isEmpty()) {
+
+        if (inputOrigin.getText().isEmpty()) {
             inputOrigin.requestFocus();
         } else {
             Airport airport = Airports.getInstance().getAirportByName(inputOrigin.getText());
             boardingPassData.setOrigin(airport);
+            validEntries++;
         }
+
         if (inputDestination.getText().isEmpty()) {
             inputDestination.requestFocus();
         } else {
             Airport airport = Airports.getInstance().getAirportByName(inputDestination.getText());
             boardingPassData.setDestination(airport);
+            validEntries++;
         }
+
         if (inputDepartTime.getValue() == null) {
             inputDepartTime.requestFocus();
         } else {
             boardingPassData.setDepartureTime(inputDepartTime.getValue());
+            validEntries++;
         }
 
+        if (validEntries == 9) {
+            checkForAgeDiscount();
+            checkForGenderDiscount();
+            showEstimates();
+        }
 
-        String stringPrice = String.format("Estimate: $ %.2f",boardingPassData.getPrice());
-
-        outputEstimate.setText(stringPrice);
-
-        // This needs some sort of a check to make sure all fields are validated
-        // I was just messing with field validation and focusing afield that was filled out
-//        showEstimates();
-
-
-        
     }
 
     public void showEstimates(){
-            flightEstimateBox.setOpacity(1);
+        flightEstimateBox.setOpacity(1);
+
+        outputFlightTime.setText(boardingPassData.getDepartureTime());
+        outputArrivalTime.setText(boardingPassData.getEta() +"---");      //need things
+        outputFlightDuration.setText("---");                              //needs things
+
+        outputTicketPrice.setText(String.format("$%.2f", boardingPassData.getTicketPrice()));
+        outputAgeDiscountAmount.setText(String.format("-%.2f", boardingPassData.getAgeDiscount()));
+        outputLadiesDiscountAmount.setText(String.format("-%.2f", boardingPassData.getFemaleDiscount()));
+
+        outputTotalCost.setText(String.format("$%.2f", boardingPassData.getTotalPrice()));
     }
-    
+
+    private void checkForAgeDiscount() {
+        Double baseTicketPrice = boardingPassData.getTicketPrice();
+        int age = boardingPassData.getAge();
+        double newTotal;
+        if (age <= 12) {
+            newTotal = baseTicketPrice * 0.5;
+        } else if (age >= 60) {
+            newTotal = baseTicketPrice * 0.6;
+        } else {
+            newTotal = 00.00;
+        }
+        boardingPassData.setAgeDiscount(newTotal);
+        boardingPassData.setTotalPrice(baseTicketPrice - newTotal);
+    }
+
+    private void checkForGenderDiscount() {
+        Double workingTotal = boardingPassData.getTotalPrice();
+        String gender = inputGenderSelection.getValue().toLowerCase();
+        Double newTotal;
+
+        if (gender.equals("female")) {
+            newTotal = workingTotal * .25;
+        } else {
+            newTotal = 00.00;
+        }
+        boardingPassData.setFemaleDiscount(newTotal);
+        boardingPassData.setTotalPrice(workingTotal - newTotal);
+    }
 }

@@ -11,41 +11,31 @@ public class BoardingPass {
     Phone Number
     Gender
     Age
-    //   //
+
     Date
     Destination
     Departure
     Time
     */
-
+    private Flight flight;
     // Passenger details
     private String name;
     private String email;
     private String phoneNumber;
     private boolean gender; // true means the gender is a female
     private Integer age;
-
-
-    private Flight flight;
     /// Fight details
     private String boardingPassNumber;
-    private String departureDate;
     private Airport origin;
     private Airport destination;
+    private String departureDate;
     private String departureTime;
     private String eta;
-
-    private double childDiscount;
-    private double elderDiscount;
+    // Ticket cost
+    private double ticketPrice;
+    private double ageDiscount;
     private double femaleDiscount;
-
-
-    // Ticket Price
-    private double price;
-
-    public Flight getFlight() {
-        return flight;
-    }
+    private double totalPrice;
 
     public BoardingPass() {
         this.flight = new Flight();
@@ -60,85 +50,47 @@ public class BoardingPass {
         this.destination = null;
         this.departureTime = null;
         this.eta = null;
-        this.childDiscount = 0;
-        this.elderDiscount = 0;
+        this.ticketPrice = 0;
+        this.ageDiscount = 0;
         this.femaleDiscount = 0;
-        this.price = 0;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void setGender(String genderInput) {
-        this.gender = genderInput.equals("female");
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    private void setBoardingPassNumber(String boardingPassNumber) {
-        this.boardingPassNumber = boardingPassNumber;
-    }
-
-    public void setDepartureDate(String departureDate) {
-        this.departureDate =  departureDate;
-    }
-
-    public void setOrigin(Airport origin) {
-        this.origin = origin;
-    }
-
-    public void setDestination(Airport destination) {
-        this.destination = destination;
-    }
-
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
-    }
-
-    public void setEta(String eta) {
-        this.eta = eta;
-    }
-
-    public Airport getOrigin() {
-        return origin;
-    }
-
-    public Airport getDestination() {
-        return destination;
-    }
-
-    public void getPriceDiscounts(int price) {
-        if(this.age <= 12) {
-            this.childDiscount = price * 0.5;
-        } else if (this.age >= 60) {
-            this.elderDiscount = price * 0.6;
-        }
-        setPrice((price - childDiscount - elderDiscount));
-        if (this.gender) {
-            this.femaleDiscount = this.price * .25;
-        }
-        setPrice(price - this.femaleDiscount);
+        this.totalPrice = 0;
 
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+    public Flight getFlight() {return flight;}
+    // Passenger details
+    public void setName(String name) {this.name = name;}
+    public void setEmail(String email) {this.email = email;}
+    public void setPhoneNumber(String phoneNumber) {this.phoneNumber = phoneNumber;}
+    public void setGender(String genderInput) {this.gender = genderInput.equals("female");}
+    public void setAge(Integer age) {this.age = age;}
+    // Fight details
+    private void setBoardingPassNumber(String boardingPassNumber) {this.boardingPassNumber = boardingPassNumber;}
+    public void setDepartureDate(String departureDate) {this.departureDate =  departureDate;}
+    public void setOrigin(Airport origin) {this.origin = origin;}
+    public void setDestination(Airport destination) {this.destination = destination;}
+    public void setDepartureTime(String departureTime) {this.departureTime = departureTime;}
+    public void setEta(String eta) {this.eta = eta;}
+    // Ticket cost
+    public void setTicketPrice(double ticketPrice) {this.ticketPrice = ticketPrice;}
+    public void setAgeDiscount(double ageDiscount) {this.ageDiscount = ageDiscount;}
+    public void setFemaleDiscount(double femaleDiscount) {this.femaleDiscount = femaleDiscount;}
+    public void setTotalPrice(double totalPrice){this.totalPrice = totalPrice;}
+
+
+    // Passenger details
+    public Integer getAge() {return age;}
+    // Fight details
+    public Airport getOrigin() {return origin;}
+    public Airport getDestination() {return destination;}
+    public String getDepartureTime() {return departureTime;}
+    public String getEta(){return eta;};
+    // Ticket cost
+    public double getTicketPrice() {return ticketPrice;}
+    public double getAgeDiscount() {return ageDiscount;}
+    public double getFemaleDiscount() {return femaleDiscount;}
+    public double getTotalPrice() {return totalPrice;}
+
 
     public void generateBoardingPassNumber() throws NoSuchAlgorithmException {
         HashCreator hash = new HashCreator();
