@@ -50,6 +50,7 @@ public class BoardingPass {
         this.destination = null;
         this.departureTime = null;
         this.eta = null;
+
         this.ticketPrice = 0;
         this.ageDiscount = 0;
         this.femaleDiscount = 0;

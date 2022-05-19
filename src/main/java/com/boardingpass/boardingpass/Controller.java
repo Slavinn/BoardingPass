@@ -246,6 +246,7 @@ public class Controller {
         double newTotal;
         if (age <= 12) {
             newTotal = baseTicketPrice * 0.5;
+
         } else if (age >= 60) {
             newTotal = baseTicketPrice * 0.6;
         } else {
