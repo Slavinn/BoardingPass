@@ -1,14 +1,10 @@
 package com.boardingpass.boardingpass.datamodel;
 
-import org.json.simple.parser.ParseException;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+
 
 public class Flight {
 
@@ -58,7 +54,7 @@ public class Flight {
                 .setScale(2, RoundingMode.HALF_UP);
 
         int hour = (int)Math.floor(time.doubleValue());
-        int min = (int)((time.doubleValue()- hour ) * 100);
+        int min = (int)((time.doubleValue()- hour ) * 100) / 60;
         this.flightDuration = LocalTime.of(hour, min);
     }
 

@@ -5,25 +5,34 @@ import com.boardingpass.boardingpass.datamodel.Airports;
 import com.boardingpass.boardingpass.datamodel.BoardingPass;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class Controller {
     public GridPane flightEstimateBox;
 
     private AnimationTimer appLoop;
-    private ArrayList<String> airportNames;
+    private CopyOnWriteArrayList<String> airportNames;
     public Label outputFlightTime;
     public Label outputArrivalTime;
     public Label outputFlightDuration;
@@ -57,16 +66,14 @@ public class Controller {
     private Button estimate_btn;
 
 
-
-
     public void initialize() {
         estimate_btn.setDisable(true);
         inputOrigin.setDisable(true);
         inputDestination.setDisable(true);
         boardingPassData = new BoardingPass();
+        airportNames = new CopyOnWriteArrayList<>();
         inputGenderSelection.getItems().addAll("Male", "Female");
         inputDepartTime.getItems().addAll(LocalTime.of(6, 30), LocalTime.of(8, 35), LocalTime.of(11, 10), LocalTime.of(14, 30), LocalTime.of(20, 50));
-        ObservableList<String> data = FXCollections.observableArrayList();
         inputAge.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
@@ -82,12 +89,12 @@ public class Controller {
             public void changed(ObservableValue<? extends String> observable, String oldValue,
                                 String newValue) {
                 if (!newValue.matches("\\d*")) {
-                    inputAge.setText(newValue.replaceAll("[^\\d]", ""));
+                    inputPhoneNumber.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
 
-        airportNames = new ArrayList<>();
+
         Runnable task = new Runnable() {
             @Override
             public void run() {
@@ -96,24 +103,23 @@ public class Controller {
 
                     for (Airport airport : Airports.getInstance().getAirportList()) {
                         airportNames.add(airport.getName().toLowerCase(Locale.ROOT));
-
                     }
                     inputOrigin.getEntries().addAll(airportNames);
                     inputDestination.getEntries().addAll(airportNames);
                     inputOrigin.setDisable(false);
                     inputDestination.setDisable(false);
-                    System.out.println("Wait for me to print before typing in text box: Add a hide and show visibility");
-
                 } catch (ExecutionException | InterruptedException | ParseException | JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
+
+
             }
         };
         new Thread(task).start();
         appLoop = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                if (airportNames.contains(inputOrigin.getText()) && airportNames.contains(inputDestination.getText()) && boardingPassData.getNormalPrice() == null) {
+                if (airportNames.contains(inputOrigin.getText()) && airportNames.contains(inputDestination.getText()) && boardingPassData.getNormalPrice().equals(BigDecimal.ZERO)) {
                     System.out.println("estimate plane ticket");
                     Airports airports = Airports.getInstance();
 
@@ -139,9 +145,14 @@ public class Controller {
 
     }
 
-    public void onBookFlightButtonPress() {
+    public void onBookFlightButtonPress() throws NoSuchAlgorithmException, IOException {
         // write data to file using boardingPassData.toString()
+        boardingPassData.generateBoardingPassNumber();
+        boardingPassData.generateBoardingPassFile();
+        PopUp.display();
+        Platform.exit();
     }
+
 
     public void onEstimateButtonPress() {
         int validate = 0;
@@ -213,10 +224,10 @@ public class Controller {
         outputArrivalTime.setText(boardingPassData.getFlight().getArrivalTime().toString());
         outputFlightDuration.setText(boardingPassData.getFlight().getFlightDuration().toString());
 
-        outputAgeDiscountAmount.setText(String.valueOf(boardingPassData.getAgeDiscount()));
-        outputLadiesDiscountAmount.setText(String.valueOf(boardingPassData.getFemaleDiscount()));
-        outputTicketPrice.setText(String.valueOf(boardingPassData.getNormalPrice()));
-        outputTotalCost.setText(String.valueOf(boardingPassData.getDiscountPrice()));
+        outputAgeDiscountAmount.setText(String.valueOf("$ " + boardingPassData.getAgeDiscount()));
+        outputLadiesDiscountAmount.setText(String.valueOf("$ " + boardingPassData.getFemaleDiscount()));
+        outputTicketPrice.setText(String.valueOf("$ " + boardingPassData.getNormalPrice()));
+        outputTotalCost.setText(String.valueOf("$ " + boardingPassData.getDiscountPrice()));
         flightEstimateBox.setOpacity(1);
     }
 

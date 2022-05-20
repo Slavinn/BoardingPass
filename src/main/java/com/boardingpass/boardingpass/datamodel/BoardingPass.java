@@ -1,9 +1,15 @@
 package com.boardingpass.boardingpass.datamodel;
 
+import javafx.scene.control.Alert;
+
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 
 public class BoardingPass {
@@ -43,10 +49,10 @@ public class BoardingPass {
         this.age = 0;
         this.flight = new Flight();
         this.boardingPassNumber = "";
-        this.ageDiscount = null;
-        this.femaleDiscount = null;
-        this.normalPrice = null;
-        this.discountPrice = null;
+        this.ageDiscount = BigDecimal.ZERO;
+        this.femaleDiscount = BigDecimal.ZERO;
+        this.normalPrice = BigDecimal.ZERO;
+        this.discountPrice =BigDecimal.ZERO;
     }
 
     public String getName() {
@@ -147,21 +153,41 @@ public class BoardingPass {
         price -= getAgeDiscount().doubleValue();
         if (this.gender.equals("Female")) {
             setFemaleDiscount(price * .25);
+            price -= getFemaleDiscount().doubleValue();
         }
-        setDiscountPrice(price - getFemaleDiscount().doubleValue());
+        setDiscountPrice(price);
 
     }
 
     public void generateBoardingPassNumber() throws NoSuchAlgorithmException {
         HashCreator hash = new HashCreator();
         setBoardingPassNumber(
-                hash.createMD5Hash(this.name+this.flight.getDepartureDate().toString()));
+                hash.createMD5Hash(this.name+this.flight.getDepartureDate().toString()+LocalDateTime.now()));
     }
 
-    @Override
-    public String toString() {
-        return String.format("name: %s\n age: %s\n isFemale: %b\n phoneNumber: %s\n email: %s"
-                , name, age, gender, phoneNumber, email);
+    public String getGender() {
+        return gender;
     }
 
+    public void generateBoardingPassFile() throws IOException {
+        File boardingPass = new File(this.boardingPassNumber);
+        if (boardingPass.createNewFile()) {
+            String template =  String.format(
+                    "\tBOARDING PASS NUMBER %s\n"+
+                            "\tPASSENGER NAME: %s\tAGE: %d \t\t\t\tGENDER: %s\n" +
+                            "\tDEPARTURE DATE: %s\t ORIGIN: %s\t\t DESTINATION: %s\n" +
+                            "\tDEPARTURE TIME: %s \t\t\t ARRIVAL TIME: %s\t\t\t FLIGHT DURATION: %s\n" +
+                            "\tTicket Price: %s\n",
+                    this.getBoardingPassNumber(),
+                    this.getName(), this.getAge(), this.getGender(),
+                    this.flight.getDepartureDate(), this.flight.getOrigin(), this.flight.getDestination(),
+                    this.flight.getDepartureTime(), this.flight.getArrivalTime(), this.flight.getFlightDuration(),
+                    this.getDiscountPrice());
+            Files.write(boardingPass.toPath(), Collections.singleton(template));
+        } else {
+            Alert.AlertType.valueOf("Unable to generate boarding pass at this time");
+        }
+
+
+    }
 }
