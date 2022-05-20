@@ -138,7 +138,7 @@
                   <Button fx:id="bookFlight_btn" mnemonicParsing="false" onMouseClicked="#onBookFlightButtonPress" prefHeight="26.0" prefWidth="108.0" text="Book Flight" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
                   <Separator fx:id="estimateBar1" prefWidth="200.0" GridPane.rowIndex="4" />
                   <Separator fx:id="estimateBar2" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label fx:id="outputEstimate" text="Estimate #0000">
+                  <Label text="Flight Details">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>

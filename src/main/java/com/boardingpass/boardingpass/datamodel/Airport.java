@@ -21,6 +21,14 @@ public class Airport {
         return iata_code;
     }
 
+    public double getLng() {
+        return lng;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
     public String getName() {
         return name;
     }

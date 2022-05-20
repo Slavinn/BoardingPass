@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -33,7 +34,7 @@ public class Airports {
 
     public Airport getAirportByName(String airPortName) {
         for (Airport airport : airportList) {
-            if(airport.getName() == airPortName) {
+            if(airport.getName().toLowerCase(Locale.ROOT).equals(airPortName)) {
                 return airport;
             }
         }

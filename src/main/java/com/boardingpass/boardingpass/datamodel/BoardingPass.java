@@ -1,5 +1,7 @@
 package com.boardingpass.boardingpass.datamodel;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
@@ -12,138 +14,148 @@ public class BoardingPass {
     Gender
     Age
     //   //
-    Date
-    Destination
-    Departure
-    Time
+
     */
 
     // Passenger details
     private String name;
     private String email;
     private String phoneNumber;
-    private boolean gender; // true means the gender is a female
+    private String gender;
     private Integer age;
-
 
     private Flight flight;
     /// Fight details
     private String boardingPassNumber;
-    private String departureDate;
-    private Airport origin;
-    private Airport destination;
-    private String departureTime;
-    private String eta;
-
-    private double childDiscount;
-    private double elderDiscount;
-    private double femaleDiscount;
-
 
     // Ticket Price
-    private double price;
+    private BigDecimal ageDiscount;
+    private BigDecimal femaleDiscount;
 
-    public Flight getFlight() {
-        return flight;
-    }
+    private  BigDecimal normalPrice;
+    private BigDecimal discountPrice;
 
     public BoardingPass() {
-        this.flight = new Flight();
         this.name = "";
         this.email = "";
         this.phoneNumber = "";
-        this.gender = false;
+        this.gender = "";
         this.age = 0;
+        this.flight = new Flight();
         this.boardingPassNumber = "";
-        this.departureDate = "";
-        this.origin = null;
-        this.destination = null;
-        this.departureTime = null;
-        this.eta = null;
-        this.childDiscount = 0;
-        this.elderDiscount = 0;
-        this.femaleDiscount = 0;
-        this.price = 0;
+        this.ageDiscount = null;
+        this.femaleDiscount = null;
+        this.normalPrice = null;
+        this.discountPrice = null;
     }
 
-    public double getPrice() {
-        return price;
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
+    public String isGender() {
+        return gender;
+    }
+
     public void setGender(String genderInput) {
-        this.gender = genderInput.equals("female");
+        this.gender = genderInput;
+    }
+
+    public Integer getAge() {
+        return age;
     }
 
     public void setAge(Integer age) {
         this.age = age;
     }
 
-    private void setBoardingPassNumber(String boardingPassNumber) {
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    public String getBoardingPassNumber() {
+        return boardingPassNumber;
+    }
+
+    public void setBoardingPassNumber(String boardingPassNumber) {
         this.boardingPassNumber = boardingPassNumber;
     }
 
-    public void setDepartureDate(String departureDate) {
-        this.departureDate =  departureDate;
+    public BigDecimal getAgeDiscount() {
+        return ageDiscount;
     }
 
-    public void setOrigin(Airport origin) {
-        this.origin = origin;
+    public void setAgeDiscount(double ageDiscount) {
+        this.ageDiscount = BigDecimal.valueOf(ageDiscount).setScale(2, RoundingMode.CEILING);
     }
 
-    public void setDestination(Airport destination) {
-        this.destination = destination;
+    public BigDecimal getFemaleDiscount() {
+        return femaleDiscount;
     }
 
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
+    public void setFemaleDiscount(double femaleDiscount) {
+        this.femaleDiscount = BigDecimal.valueOf(femaleDiscount).setScale(2, RoundingMode.CEILING);
     }
 
-    public void setEta(String eta) {
-        this.eta = eta;
+    public BigDecimal getNormalPrice() {
+        return normalPrice;
     }
 
-    public Airport getOrigin() {
-        return origin;
+    public void setNormalPrice() {
+        this.normalPrice = BigDecimal.valueOf((this.flight.getDistance() * .15)).setScale(2, RoundingMode.CEILING); // random info
+
     }
 
-    public Airport getDestination() {
-        return destination;
+    public BigDecimal getDiscountPrice() {
+        return discountPrice;
     }
 
-    public void getPriceDiscounts(int price) {
+    public void setDiscountPrice(double discountPrice) {
+        this.discountPrice = BigDecimal.valueOf(discountPrice).setScale(2, RoundingMode.CEILING);
+    }
+
+    public void setPriceDiscounts(double price) {
         if(this.age <= 12) {
-            this.childDiscount = price * 0.5;
+            setAgeDiscount(price * 0.5);
         } else if (this.age >= 60) {
-            this.elderDiscount = price * 0.6;
+            setAgeDiscount(price * 0.6);
         }
-        setPrice((price - childDiscount - elderDiscount));
-        if (this.gender) {
-            this.femaleDiscount = this.price * .25;
+        price -= getAgeDiscount().doubleValue();
+        if (this.gender.equals("Female")) {
+            setFemaleDiscount(price * .25);
         }
-        setPrice(price - this.femaleDiscount);
+        setDiscountPrice(price - getFemaleDiscount().doubleValue());
 
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public void generateBoardingPassNumber() throws NoSuchAlgorithmException {
         HashCreator hash = new HashCreator();
         setBoardingPassNumber(
-                hash.createMD5Hash(this.name+this.departureDate));
+                hash.createMD5Hash(this.name+this.flight.getDepartureDate().toString()));
     }
 
     @Override
@@ -151,4 +163,5 @@ public class BoardingPass {
         return String.format("name: %s\n age: %s\n isFemale: %b\n phoneNumber: %s\n email: %s"
                 , name, age, gender, phoneNumber, email);
     }
+
 }
